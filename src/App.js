@@ -1,26 +1,44 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import SearchBar from './components/SearchBar';
+import Popular from './components/Popular/Popular';
+import WeatherCard from './components/WeatherCard';
+import OpenWeather from './api/OpenWeather';
 
-function App() {
+
+
+
+class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      results: {}
+    }
+
+    this.searchAPI = this.searchAPI.bind(this);
+  }
+
+
+  searchAPI(query) {
+    OpenWeather.search(query).then(results => {
+      this.setState({
+        results: results
+      });
+      console.log(results);
+    });
+  }
+
+render() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  <div>
+    <h1>This is Meteor.</h1>
+    <SearchBar searchAPI={this.searchAPI}/>
+    <WeatherCard results={this.state.results} />
+    <Popular searchAPI={this.searchAPI}/>
+  </div>
+  )
 }
+};
+
 
 export default App;
